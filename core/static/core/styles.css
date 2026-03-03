@@ -1,0 +1,49 @@
+:root {
+  --bg: #eef2f2;
+  --ink: #13231f;
+  --accent: #2f9e44;
+  --accent-dark: #247a35;
+  --surface: #ffffff;
+}
+
+body {
+  background: radial-gradient(circle at top right, #d5ece0, var(--bg) 40%);
+  color: var(--ink);
+}
+
+.top-nav {
+  background-color: #ffffffcc;
+  backdrop-filter: blur(4px);
+}
+
+.hero {
+  background: linear-gradient(120deg, #17352d, #225945);
+  color: #fff;
+}
+
+.card-soft {
+  background-color: var(--surface);
+  border: 1px solid #d8e2dd;
+  border-radius: 1rem;
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-dark);
+  color: #fff;
+  border-color: var(--accent-dark);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #c8d3cd;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.65rem;
+}

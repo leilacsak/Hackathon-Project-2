@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">My Bookings</h1>
+<div class="card card-soft">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Court</th>
+            <th>Surface</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>{{ booking.player_name }}</td>
+              <td>{{ booking.date }}</td>
+              <td>{{ booking.start_time|time:"H:i" }}</td>
+              <td>{{ booking.court_number }}</td>
+              <td>{{ booking.get_surface_display }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-4">No bookings yet. Create your first one from the Book a Court page.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
