@@ -10,7 +10,7 @@ body {
   background: radial-gradient(circle at top right, #d5ece0, var(--bg) 40%);
   color: var(--ink);
 }
-
+/* Navigation Bar */
 .top-nav {
   background-color: #ffffffcc;
   backdrop-filter: blur(4px);
@@ -23,17 +23,39 @@ body {
   display: block;
 }
 
+/* Hero Section */
 .hero {
   background: linear-gradient(120deg, #17352d, #225945);
   color: #fff;
 }
 
+/*Footer*/
+.footer {
+  background-color: #ffffffcc;
+  backdrop-filter: blur(4px);
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.9rem;
+}
+
+.social-icons a {
+  color: var(--ink);
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: var(--accent-dark);
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* Cards */
 .card-soft {
   background-color: var(--surface);
   border: 1px solid #d8e2dd;
   border-radius: 1rem;
 }
 
+/* Buttons */
 .btn-accent {
   background-color: var(--accent);
   color: #fff;
@@ -46,6 +68,7 @@ body {
   border-color: var(--accent-dark);
 }
 
+/* Forms */
 input,
 select,
 textarea {
