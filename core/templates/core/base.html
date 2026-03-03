@@ -10,8 +10,11 @@
 </head>
 <body>
   <header class="top-nav shadow-sm">
-    <nav class="navbar navbar-expand-lg container py-3">
-      <a class="navbar-brand fw-bold" href="{% url 'home' %}">Tennis Booker</a>
+    <nav class="navbar navbar-expand-lg container py-0">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <img src="{% static 'core/images/SetPoint_logo.png' %}" alt="SetPoint Logo" class="logo">
+        <span class="fw-bold fs-4">SetPoint</span>
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
       </button>

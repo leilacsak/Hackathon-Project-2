@@ -16,6 +16,13 @@ body {
   backdrop-filter: blur(4px);
 }
 
+.navbar-brand .logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .hero {
   background: linear-gradient(120deg, #17352d, #225945);
   color: #fff;
