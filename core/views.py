@@ -1,5 +1,6 @@
 from datetime import date
-
+import django
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
@@ -43,13 +44,13 @@ def courts(request):
     )
 
 
+@login_required
 def book_court(request):
     if request.method == "POST":
         form = BookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
-            if request.user.is_authenticated:
-                booking.owner = request.user
+            booking.owner = request.user
             booking.save()
             messages.success(request, "Booking created successfully.")
             return redirect("my_bookings")
