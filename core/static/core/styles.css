@@ -129,8 +129,14 @@ body.auth-page .card .form-text {
   --hover-aura-size: 24px;
 }
 
+.courts-grid .card-soft {
+  --hover-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  --hover-aura-size: 24px;
+}
+
 .hero-image-wrap,
-.home-cards .card-soft {
+.home-cards .card-soft,
+.courts-grid .card-soft {
   transition:
     box-shadow 0.25s ease,
     transform 0.25s ease,
@@ -138,7 +144,8 @@ body.auth-page .card .form-text {
 }
 
 .hero-image-wrap:hover,
-.home-cards .card-soft:hover {
+.home-cards .card-soft:hover,
+.courts-grid .card-soft:hover {
   border-color: var(--glow-border);
   box-shadow:
     var(--hover-shadow),
