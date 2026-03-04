@@ -17,7 +17,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 
-from .forms import BookingForm
+from .forms import BookingForm, ContactRequestForm
 from .models import Booking, Court, SavedSlot
 
 
@@ -422,9 +422,70 @@ def cancel_booking(request, booking_id):
     if booking.owner_id != request.user.id:
         return HttpResponseForbidden("You cannot cancel another user's booking.")
 
-    booking.delete()
-    messages.success(request, "Booking cancelled successfully.")
+    if booking.payment_status == Booking.PaymentStatus.PAID:
+        booking.payment_status = Booking.PaymentStatus.CANCELLED
+        booking.save(update_fields=["payment_status"])
+        contact_url = reverse("contact_support") + f"?booking_id={booking.id}"
+        messages.warning(
+            request,
+            format_html(
+                "Paid booking cancelled. <a href='{}'>Contact support to request a refund</a>.",
+                contact_url,
+            ),
+        )
+    elif booking.payment_status in {
+        Booking.PaymentStatus.CANCELLED,
+        Booking.PaymentStatus.REFUNDED,
+    }:
+        messages.info(request, "This booking is already cancelled.")
+    else:
+        booking.delete()
+        messages.success(request, "Booking cancelled successfully.")
     return redirect("my_bookings")
+
+
+@login_required
+def contact_support(request):
+    initial_data = {}
+    booking_id = request.GET.get("booking_id")
+    if booking_id:
+        booking = Booking.objects.filter(
+            pk=booking_id,
+            owner=request.user,
+        ).first()
+        if booking:
+            initial_data = {
+                "booking": booking,
+                "subject": (
+                    f"Refund request for booking {booking.date:%d %b %Y} "
+                    f"{booking.start_time:%H:%M}"
+                ),
+                "message": (
+                    "Please review my cancelled paid booking and issue a refund."
+                ),
+            }
+
+    if request.method == "POST":
+        form = ContactRequestForm(request.POST, user=request.user)
+        if form.is_valid():
+            contact_request = form.save(commit=False)
+            contact_request.owner = request.user
+            contact_request.save()
+            messages.success(
+                request,
+                "Your request has been sent to support. We'll review it shortly.",
+            )
+            return redirect("my_bookings")
+    else:
+        form = ContactRequestForm(initial=initial_data, user=request.user)
+
+    return render(
+        request,
+        "core/contact_support.html",
+        {
+            "form": form,
+        },
+    )
 
 
 @login_required
@@ -489,6 +550,23 @@ def stripe_webhook(request):
         session = event["data"]["object"]
         metadata = session.get("metadata", {})
         booking_id = metadata.get("booking_id")
+        payment_intent_id = session.get("payment_intent", "")
+        charge_id = ""
+
+        if payment_intent_id:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            try:
+                payment_intent = stripe.PaymentIntent.retrieve(
+                    payment_intent_id,
+                    expand=["latest_charge"],
+                )
+                latest_charge = payment_intent.get("latest_charge")
+                if isinstance(latest_charge, dict):
+                    charge_id = latest_charge.get("id", "")
+                elif latest_charge:
+                    charge_id = latest_charge
+            except stripe.error.StripeError:
+                charge_id = ""
 
         if booking_id:
             booking = Booking.objects.filter(pk=booking_id).first()
@@ -497,11 +575,15 @@ def stripe_webhook(request):
                 booking.paid_at = timezone.now()
                 if session.get("id"):
                     booking.stripe_checkout_session_id = session["id"]
+                booking.stripe_payment_intent_id = payment_intent_id or ""
+                booking.stripe_charge_id = charge_id
                 booking.save(
                     update_fields=[
                         "payment_status",
                         "paid_at",
                         "stripe_checkout_session_id",
+                        "stripe_payment_intent_id",
+                        "stripe_charge_id",
                     ]
                 )
 

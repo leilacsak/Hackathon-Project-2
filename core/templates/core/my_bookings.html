@@ -84,23 +84,30 @@
                   <span class="badge text-bg-primary">Paid</span>
                 {% elif booking.payment_status == "pending" %}
                   <span class="badge text-bg-warning">Pending payment</span>
+                {% elif booking.payment_status == "cancelled" %}
+                  <span class="badge text-bg-secondary">Cancelled</span>
                 {% else %}
                   <span class="badge text-bg-secondary">{{ booking.get_payment_status_display }}</span>
                 {% endif %}
               </td>
               <td><span class="badge text-bg-success">Upcoming</span></td>
               <td>
-                {% if booking.payment_status != "paid" %}
+                {% if booking.payment_status == "pending" %}
                   <form method="post" action="{% url 'pay_booking' booking.id %}" class="d-inline me-1">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-success">Pay now</button>
                   </form>
                 {% endif %}
+                {% if booking.payment_status != "cancelled" and booking.payment_status != "refunded" %}
                 <a href="{% url 'edit_booking' booking.id %}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
                 <form method="post" action="{% url 'cancel_booking' booking.id %}" class="d-inline me-1">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
                 </form>
+                {% endif %}
+                {% if booking.payment_status == "cancelled" %}
+                  <a href="{% url 'contact_support' %}?booking_id={{ booking.id }}" class="btn btn-sm btn-outline-warning me-1">Request refund</a>
+                {% endif %}
                 {% if booking.is_saved_slot %}
                   <form method="post" action="{% url 'unsave_slot' booking.saved_slot_id %}" class="d-inline">
                     {% csrf_token %}
@@ -160,17 +167,22 @@
                   <span class="badge text-bg-primary">Paid</span>
                 {% elif booking.payment_status == "pending" %}
                   <span class="badge text-bg-warning">Pending payment</span>
+                {% elif booking.payment_status == "cancelled" %}
+                  <span class="badge text-bg-secondary">Cancelled</span>
                 {% else %}
                   <span class="badge text-bg-secondary">{{ booking.get_payment_status_display }}</span>
                 {% endif %}
               </td>
               <td><span class="badge text-bg-secondary">Past</span></td>
               <td>
-                {% if booking.payment_status != "paid" %}
+                {% if booking.payment_status == "pending" %}
                   <form method="post" action="{% url 'pay_booking' booking.id %}" class="d-inline me-1">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-success">Pay now</button>
                   </form>
+                {% endif %}
+                {% if booking.payment_status == "cancelled" %}
+                  <a href="{% url 'contact_support' %}?booking_id={{ booking.id }}" class="btn btn-sm btn-outline-warning me-1">Request refund</a>
                 {% endif %}
                 {% if booking.is_saved_slot %}
                   <form method="post" action="{% url 'unsave_slot' booking.saved_slot_id %}" class="d-inline me-1">

@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block title %}Contact Support{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Contact Support</h1>
+<div class="card card-soft">
+  <div class="card-body p-4">
+    <p class="mb-3">Use this form to request help or ask for a refund after cancelling a paid booking.</p>
+    <form method="post" class="row g-3">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="col-12">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <div class="col-12">
+        <button type="submit" class="btn btn-accent">Send request</button>
+        <a href="{% url 'my_bookings' %}" class="btn btn-outline-secondary btn-glow ms-2">Back to My Bookings</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
