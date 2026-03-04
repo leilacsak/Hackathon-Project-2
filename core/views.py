@@ -1,15 +1,41 @@
 from datetime import date
+from django import forms as django_forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import BookingForm
-from .models import Booking, Court
+from .models import Booking, Court, SavedSlot
+
+
+def _safe_next_url(next_url, fallback_name):
+    if next_url and next_url.startswith("/"):
+        return next_url
+    return reverse(fallback_name)
+
+
+def _parse_saved_slot_payload(data):
+    try:
+        parsed_date = django_forms.DateField().clean(data.get("date"))
+        parsed_start_time = django_forms.TimeField().clean(data.get("start_time"))
+        parsed_court_number = int(data.get("court_number"))
+    except (django_forms.ValidationError, TypeError, ValueError):
+        return None
+
+    if parsed_court_number < 1:
+        return None
+
+    return {
+        "date": parsed_date,
+        "start_time": parsed_start_time,
+        "court_number": parsed_court_number,
+    }
 
 
 def home(request):
@@ -99,11 +125,28 @@ def book_court(request):
     else:
         form = BookingForm(initial=initial_data)
 
+    saved_prefill = None
+    if request.user.is_authenticated:
+        saved_prefill = _parse_saved_slot_payload(initial_data)
+        if saved_prefill:
+            existing_saved_slot = SavedSlot.objects.filter(
+                owner=request.user,
+                date=saved_prefill["date"],
+                start_time=saved_prefill["start_time"],
+                court_number=saved_prefill["court_number"],
+            ).first()
+            saved_prefill["is_saved"] = bool(existing_saved_slot)
+            saved_prefill["slot_id"] = existing_saved_slot.id if existing_saved_slot else None
+
     has_any_available_court = Court.objects.filter(is_available=True).exists()
     return render(
         request,
         "core/book_court.html",
-        {"form": form, "has_any_available_court": has_any_available_court},
+        {
+            "form": form,
+            "has_any_available_court": has_any_available_court,
+            "saved_prefill": saved_prefill,
+        },
     )
 
 
@@ -128,14 +171,97 @@ def my_bookings(request):
         else:
             upcoming_bookings.append(booking)
 
+    saved_slots = list(
+        SavedSlot.objects.filter(owner=request.user).order_by("date", "start_time", "court_number")
+    )
+    saved_slot_lookup = {
+        (slot.date, slot.start_time, slot.court_number): slot.id for slot in saved_slots
+    }
+
+    for booking in upcoming_bookings + past_bookings:
+        slot_key = (
+            booking.date,
+            booking.start_time,
+            booking.court_number,
+        )
+        booking.saved_slot_id = saved_slot_lookup.get(slot_key)
+        booking.is_saved_slot = bool(booking.saved_slot_id)
+
+    court_map = {court.number: court for court in Court.objects.all()}
+    occupied_saved_slot_keys = set(
+        Booking.objects.filter(
+            date__in=[slot.date for slot in saved_slots],
+            court_number__in=[slot.court_number for slot in saved_slots],
+        ).values_list("date", "start_time", "court_number")
+    )
+    for slot in saved_slots:
+        court = court_map.get(slot.court_number)
+        if not court:
+            slot.can_rebook = False
+            continue
+        slot.can_rebook = court.is_available_on(slot.date) and (
+            slot.date,
+            slot.start_time,
+            slot.court_number,
+        ) not in occupied_saved_slot_keys
+
     return render(
         request,
         "core/my_bookings.html",
         {
             "upcoming_bookings": upcoming_bookings,
             "past_bookings": past_bookings,
+            "saved_slots": saved_slots,
         },
     )
+
+
+@login_required
+@require_POST
+def save_slot(request):
+    redirect_url = _safe_next_url(request.POST.get("next"), "my_bookings")
+    parsed_payload = _parse_saved_slot_payload(request.POST)
+    if not parsed_payload:
+        messages.error(request, "Could not save this slot. Please choose a valid court, date, and time.")
+        return redirect(redirect_url)
+
+    court = Court.objects.filter(number=parsed_payload["court_number"]).first()
+    if not court:
+        messages.error(request, "Could not save this slot because the selected court does not exist.")
+        return redirect(redirect_url)
+
+    saved_slot, created = SavedSlot.objects.get_or_create(
+        owner=request.user,
+        date=parsed_payload["date"],
+        start_time=parsed_payload["start_time"],
+        court_number=parsed_payload["court_number"],
+        defaults={"surface": court.surface},
+    )
+    if not created and saved_slot.surface != court.surface:
+        saved_slot.surface = court.surface
+        saved_slot.save(update_fields=["surface"])
+
+    if created:
+        messages.success(
+            request,
+            (
+                f"Saved Court {saved_slot.court_number} for "
+                f"{saved_slot.date:%d %b %Y} at {saved_slot.start_time:%H:%M}."
+            ),
+        )
+    else:
+        messages.info(request, "This court/date/time is already saved.")
+    return redirect(redirect_url)
+
+
+@login_required
+@require_POST
+def unsave_slot(request, slot_id):
+    redirect_url = _safe_next_url(request.POST.get("next"), "my_bookings")
+    saved_slot = get_object_or_404(SavedSlot, pk=slot_id, owner=request.user)
+    saved_slot.delete()
+    messages.success(request, "Saved slot removed.")
+    return redirect(redirect_url)
 
 
 @login_required

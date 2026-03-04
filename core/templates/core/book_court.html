@@ -9,6 +9,26 @@
     No courts are available right now. Please check back later.
   </div>
 {% endif %}
+{% if saved_prefill %}
+  <div class="mb-3">
+    {% if saved_prefill.is_saved %}
+      <form method="post" action="{% url 'unsave_slot' saved_prefill.slot_id %}" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button type="submit" class="btn btn-sm btn-outline-secondary">Unsave this court/date/time</button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'save_slot' %}" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <input type="hidden" name="court_number" value="{{ saved_prefill.court_number }}">
+        <input type="hidden" name="date" value="{{ saved_prefill.date|date:'Y-m-d' }}">
+        <input type="hidden" name="start_time" value="{{ saved_prefill.start_time|time:'H:i' }}">
+        <button type="submit" class="btn btn-sm btn-outline-primary">Save this court/date/time</button>
+      </form>
+    {% endif %}
+  </div>
+{% endif %}
 <div class="card card-soft">
   <div class="card-body p-4">
     <form method="post" class="row g-3">

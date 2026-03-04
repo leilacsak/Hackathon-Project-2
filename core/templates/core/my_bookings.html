@@ -4,6 +4,55 @@
 
 {% block content %}
 <h1 class="mb-4">My Bookings</h1>
+<div class="card card-soft mb-4">
+  <div class="card-body p-0">
+    <h2 class="h5 px-3 pt-3 mb-2">Saved / Bookmarked Slots</h2>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Court</th>
+            <th>Surface</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for slot in saved_slots %}
+            <tr>
+              <td>{{ slot.date }}</td>
+              <td>{{ slot.start_time|time:"H:i" }}</td>
+              <td>{{ slot.court_number }}</td>
+              <td>{{ slot.get_surface_display }}</td>
+              <td>
+                <form method="post" action="{% url 'unsave_slot' slot.id %}" class="d-inline me-1">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{% url 'my_bookings' %}">
+                  <button type="submit" class="btn btn-sm btn-outline-secondary">Unsave</button>
+                </form>
+                {% if slot.can_rebook %}
+                  <a
+                    href="{% url 'book_court' %}?court_number={{ slot.court_number }}&date={{ slot.date|date:'Y-m-d' }}&start_time={{ slot.start_time|time:'H:i' }}"
+                    class="btn btn-sm btn-outline-success btn-glow"
+                  >
+                    Rebook this court/date/time
+                  </a>
+                {% else %}
+                  <span class="text-muted small">Currently unavailable to rebook</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center py-4">No saved slots yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% if upcoming_bookings or past_bookings %}
 <div class="card card-soft mb-4">
   <div class="card-body p-0">
@@ -31,10 +80,26 @@
               <td>{{ booking.get_surface_display }}</td>
               <td><span class="badge text-bg-success">Upcoming</span></td>
               <td>
-                <form method="post" action="{% url 'cancel_booking' booking.id %}" class="d-inline">
+                <form method="post" action="{% url 'cancel_booking' booking.id %}" class="d-inline me-1">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
                 </form>
+                {% if booking.is_saved_slot %}
+                  <form method="post" action="{% url 'unsave_slot' booking.saved_slot_id %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'my_bookings' %}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Unsave</button>
+                  </form>
+                {% else %}
+                  <form method="post" action="{% url 'save_slot' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'my_bookings' %}">
+                    <input type="hidden" name="court_number" value="{{ booking.court_number }}">
+                    <input type="hidden" name="date" value="{{ booking.date|date:'Y-m-d' }}">
+                    <input type="hidden" name="start_time" value="{{ booking.start_time|time:'H:i' }}">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Save court/date/time</button>
+                  </form>
+                {% endif %}
               </td>
             </tr>
           {% empty %}
@@ -74,11 +139,27 @@
               <td>{{ booking.get_surface_display }}</td>
               <td><span class="badge text-bg-secondary">Past</span></td>
               <td>
+                {% if booking.is_saved_slot %}
+                  <form method="post" action="{% url 'unsave_slot' booking.saved_slot_id %}" class="d-inline me-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'my_bookings' %}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Unsave</button>
+                  </form>
+                {% else %}
+                  <form method="post" action="{% url 'save_slot' %}" class="d-inline me-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'my_bookings' %}">
+                    <input type="hidden" name="court_number" value="{{ booking.court_number }}">
+                    <input type="hidden" name="date" value="{{ booking.date|date:'Y-m-d' }}">
+                    <input type="hidden" name="start_time" value="{{ booking.start_time|time:'H:i' }}">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Save court/date/time</button>
+                  </form>
+                {% endif %}
                 <a
-                  href="{% url 'book_court' %}?court_number={{ booking.court_number }}&start_time={{ booking.start_time|time:'H:i' }}"
+                  href="{% url 'book_court' %}?court_number={{ booking.court_number }}&date={{ booking.date|date:'Y-m-d' }}&start_time={{ booking.start_time|time:'H:i' }}"
                   class="btn btn-sm btn-outline-success btn-glow"
                 >
-                  Rebook this court/time
+                  Rebook this court/date/time
                 </a>
               </td>
             </tr>

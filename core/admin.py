@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Booking, Court
+from .models import Booking, Court, SavedSlot
 
 
 @admin.register(Court)
@@ -30,3 +30,11 @@ class BookingAdmin(admin.ModelAdmin):
     @admin.display(ordering="start_time", description="Time Slot")
     def time_slot(self, obj):
         return obj.start_time
+
+
+@admin.register(SavedSlot)
+class SavedSlotAdmin(admin.ModelAdmin):
+    list_display = ("owner", "court_number", "date", "start_time", "surface")
+    list_filter = ("date", "surface")
+    search_fields = ("owner__username", "owner__email")
+    ordering = ("date", "start_time", "court_number")

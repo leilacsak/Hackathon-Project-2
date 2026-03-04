@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .admin import BookingAdmin, CourtAdmin
-from .models import Booking, Court
+from .models import Booking, Court, SavedSlot
 
 
 class BookingAdminTests(TestCase):
@@ -278,6 +278,100 @@ class BookingConfirmationTests(TestCase):
                 court_number=self.court.number,
             ).count(),
             1,
+        )
+
+
+class SavedSlotTests(TestCase):
+    def setUp(self):
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            username="saved-slot-user",
+            email="saved.slot.user@example.com",
+            password="saved-slot-pass-123",
+        )
+        self.client.force_login(self.user)
+        self.court = Court.objects.create(
+            number=30,
+            surface=Court.Surface.CLAY,
+            is_available=True,
+        )
+        self.payload = {
+            "court_number": self.court.number,
+            "date": "2026-03-28",
+            "start_time": "11:00",
+            "next": reverse("my_bookings"),
+        }
+
+    def test_user_can_save_slot(self):
+        response = self.client.post(reverse("save_slot"), self.payload, follow=True)
+
+        self.assertRedirects(response, reverse("my_bookings"))
+        self.assertEqual(SavedSlot.objects.filter(owner=self.user).count(), 1)
+        self.assertContains(response, "Saved Court 30 for 28 Mar 2026 at 11:00.")
+
+    def test_saving_same_slot_twice_does_not_create_duplicates(self):
+        self.client.post(reverse("save_slot"), self.payload)
+        response = self.client.post(reverse("save_slot"), self.payload, follow=True)
+
+        self.assertRedirects(response, reverse("my_bookings"))
+        self.assertEqual(SavedSlot.objects.filter(owner=self.user).count(), 1)
+        self.assertContains(response, "already saved")
+
+    def test_user_can_unsave_slot(self):
+        slot = SavedSlot.objects.create(
+            owner=self.user,
+            date=date(2026, 3, 28),
+            start_time=time(11, 0),
+            court_number=self.court.number,
+            surface=self.court.surface,
+        )
+        response = self.client.post(
+            reverse("unsave_slot", args=[slot.id]),
+            {"next": reverse("my_bookings")},
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("my_bookings"))
+        self.assertFalse(SavedSlot.objects.filter(pk=slot.pk).exists())
+        self.assertContains(response, "Saved slot removed.")
+
+    def test_book_court_prefill_shows_save_then_unsave_button(self):
+        book_url = f"{reverse('book_court')}?court_number=30&date=2026-03-28&start_time=11:00"
+        initial_response = self.client.get(book_url)
+        self.assertEqual(initial_response.status_code, 200)
+        self.assertContains(initial_response, "Save this court/date/time")
+
+        self.client.post(
+            reverse("save_slot"),
+            {
+                "court_number": self.court.number,
+                "date": "2026-03-28",
+                "start_time": "11:00",
+                "next": book_url,
+            },
+            follow=True,
+        )
+        updated_response = self.client.get(book_url)
+
+        self.assertEqual(updated_response.status_code, 200)
+        self.assertContains(updated_response, "Unsave this court/date/time")
+
+    def test_saved_section_shows_rebook_link_when_slot_is_available(self):
+        SavedSlot.objects.create(
+            owner=self.user,
+            date=date(2026, 3, 28),
+            start_time=time(11, 0),
+            court_number=self.court.number,
+            surface=self.court.surface,
+        )
+        response = self.client.get(reverse("my_bookings"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Saved / Bookmarked Slots")
+        self.assertContains(response, "Rebook this court/date/time")
+        self.assertContains(
+            response,
+            f"{reverse('book_court')}?court_number=30&date=2026-03-28&start_time=11:00",
         )
 
 

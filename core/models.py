@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.db import models
-from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class Court(models.Model):
@@ -80,3 +79,40 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Court {self.court_number} - {self.player_name} ({self.date})"
+
+
+class SavedSlot(models.Model):
+    class Surface(models.TextChoices):
+        HARD = "hard", "Hard"
+        CLAY = "clay", "Clay"
+        GRASS = "grass", "Grass"
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="saved_slots",
+    )
+    date = models.DateField()
+    start_time = models.TimeField()
+    court_number = models.PositiveSmallIntegerField()
+    surface = models.CharField(
+        max_length=10,
+        choices=Surface.choices,
+        default=Surface.HARD,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["date", "start_time", "court_number"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["owner", "date", "start_time", "court_number"],
+                name="unique_saved_slot_per_user",
+            )
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.owner} saved Court {self.court_number} "
+            f"on {self.date} at {self.start_time}"
+        )
