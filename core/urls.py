@@ -16,6 +16,7 @@ urlpatterns = [
     path("my-bookings/", views.my_bookings, name="my_bookings"),
     path("my-bookings/<int:booking_id>/pay/", views.pay_booking, name="pay_booking"),
     path("my-bookings/<int:booking_id>/cancel/", views.cancel_booking, name="cancel_booking"),
+    path("contact/", views.contact_support, name="contact_support"),
     path("payments/success/", views.payment_success, name="payment_success"),
     path("payments/cancel/", views.payment_cancel, name="payment_cancel"),
     path("stripe/webhook/", views.stripe_webhook, name="stripe_webhook"),

@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from allauth.account.forms import LoginForm, SignupForm
 
-from .models import Booking, Court
+from .models import Booking, ContactRequest, Court
 
 
 class BookingForm(forms.ModelForm):
@@ -132,6 +132,35 @@ class BookingForm(forms.ModelForm):
         if commit:
             booking.save()
         return booking
+
+
+class ContactRequestForm(forms.ModelForm):
+    class Meta:
+        model = ContactRequest
+        fields = ["booking", "subject", "message"]
+        widgets = {
+            "subject": forms.TextInput(
+                attrs={"placeholder": "Refund request for cancelled booking"}
+            ),
+            "message": forms.Textarea(
+                attrs={
+                    "rows": 5,
+                    "placeholder": "Tell us why you need a refund and include any details.",
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+        self.fields["booking"].required = False
+        self.fields["booking"].queryset = Booking.objects.none()
+        if user and user.is_authenticated:
+            self.fields["booking"].queryset = Booking.objects.filter(
+                owner=user
+            ).order_by("-date", "-start_time")
+        self.fields["booking"].label = "Booking (optional)"
+        apply_bootstrap_field_classes(self)
 
 
 class CustomSignupForm(SignupForm):

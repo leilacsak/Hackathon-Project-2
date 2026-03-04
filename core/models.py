@@ -52,6 +52,7 @@ class Booking(models.Model):
         PENDING = "pending", "Pending"
         PAID = "paid", "Paid"
         CANCELLED = "cancelled", "Cancelled"
+        REFUNDED = "refunded", "Refunded"
 
     class Surface(models.TextChoices):
         HARD = "hard", "Hard"
@@ -83,6 +84,10 @@ class Booking(models.Model):
         default=PaymentStatus.PENDING,
     )
     stripe_checkout_session_id = models.CharField(max_length=255, blank=True)
+    stripe_payment_intent_id = models.CharField(max_length=255, blank=True)
+    stripe_charge_id = models.CharField(max_length=255, blank=True)
+    stripe_refund_id = models.CharField(max_length=255, blank=True)
+    refunded_at = models.DateTimeField(blank=True, null=True)
     paid_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -91,6 +96,39 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Court {self.court_number} - {self.player_name} ({self.date})"
+
+
+class ContactRequest(models.Model):
+    class Status(models.TextChoices):
+        OPEN = "open", "Open"
+        RESOLVED = "resolved", "Resolved"
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="contact_requests",
+    )
+    booking = models.ForeignKey(
+        Booking,
+        on_delete=models.SET_NULL,
+        related_name="contact_requests",
+        blank=True,
+        null=True,
+    )
+    subject = models.CharField(max_length=120)
+    message = models.TextField(max_length=1000)
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.OPEN,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Contact request #{self.id} by {self.owner}"
 
 
 class SavedSlot(models.Model):
