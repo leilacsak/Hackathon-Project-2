@@ -155,7 +155,7 @@ Future Features ( planned for future development)
 
 User stories were prioritised using the MoSCoW method (Must Have, Should Have, Could Have) to ensure that essential booking functionality was implemented first while allowing room for additional improvements if time permitted.
 
-![Kanban Project Board](ReadMe-Images/kanban.png)
+![](assets/20260305_153002_kanban.png)
 
 **Development was structured into the following sprints:**
 
@@ -265,24 +265,21 @@ SetPoint provides a complete court-booking user journey, from checking live avai
 
 - **Book Court Page (`/book/`)**: booking form with validation, saved-slot shortcuts, and Stripe checkout handoff.
 
-
+  ![](assets/20260305_153108_bookacourtpage.png)
 - **My Bookings (`/my-bookings/`)**: upcoming/past booking tables with payment status, edit/cancel, save/unsave, and rebook actions.
 
-![My Bookings Page](ReadMe-Images/mybookingspage.png)
-
+  ![](assets/20260305_153132_mybookingspage.png)
 - **Contact Support (`/contact/`)**: support/refund request form linked to optional booking context.
-
-![Contact Page](ReadMe-Images/contactpage.png)
-
+- ![](assets/20260305_153153_contactpage.png)
 - **Payment pages (`/payments/success/`)**: user feedback after Stripe checkout.
 
-![Payment Page](ReadMe-Images/paymentpage.png)
+  ![](assets/20260305_153232_paymentpage.png)
 
-![Successful payment Page](ReadMe-Images/successfulpayment.png)
+  ![](assets/20260305_153252_successfulpayment.png)
 
-![Refund Proccess](ReadMe-Images/cancelledbooking.png)
+  ![](assets/20260305_153305_cancelledbooking.png)
 
-### CRUD
+CRUD
 
 - **Create**: users create bookings and support requests; users can save favourite slots.
 - **Read**: users view court availability, pricing, saved slots, and booking history.
