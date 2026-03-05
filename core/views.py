@@ -1,5 +1,6 @@
-import stripe
 from datetime import date, time
+
+import stripe
 from django import forms as django_forms
 from django.conf import settings
 from django.contrib import messages
@@ -13,12 +14,11 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils import timezone
-from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-
+from django.views.decorators.http import require_POST
 
 from .forms import BookingForm, ContactRequestForm
-from .models import Booking, Court, SavedSlot, About
+from .models import About, Booking, Court, SavedSlot
 from .pricing import get_slot_price_pence, get_slot_pricing
 
 
@@ -170,7 +170,7 @@ def courts(request):
                 "label": slot_pricing["label"],
             }
         )
-    
+
     booked_slots = {
         f"{booking.court_number}-{booking.start_time.strftime('%H:%M')}"
         for booking in bookings

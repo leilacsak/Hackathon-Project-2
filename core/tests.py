@@ -10,6 +10,7 @@ from .admin import BookingAdmin, CourtAdmin
 from .models import Booking, Court, SavedSlot
 from .pricing import get_slot_price_pence, get_slot_pricing, is_peak_slot
 
+# pylint: disable=protected-access
 
 class BookingAdminTests(TestCase):
     def setUp(self):

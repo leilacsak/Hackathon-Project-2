@@ -1,4 +1,3 @@
-import os
 """
 Django settings for booking_app project.
 
@@ -11,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
 try:
     import dj_database_url
 except ImportError:

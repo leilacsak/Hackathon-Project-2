@@ -22,4 +22,3 @@ urlpatterns = [
     path("payments/cancel/", views.payment_cancel, name="payment_cancel"),
     path("stripe/webhook/", views.stripe_webhook, name="stripe_webhook"),
 ]
-
