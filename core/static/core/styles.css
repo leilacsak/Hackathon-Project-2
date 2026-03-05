@@ -72,6 +72,31 @@ body.auth-page .card .form-text {
   display: block;
 }
 
+.admin-link {
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface) 86%);
+  color: var(--ink);
+  font-weight: 600;
+  padding: 0.35rem 0.8rem !important;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-link:hover,
+.admin-link:focus-visible {
+  color: var(--ink);
+  border-color: var(--glow-border);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface) 78%);
+  box-shadow:
+    var(--glow-ring),
+    0 0 16px var(--glow-aura-color);
+  transform: translateY(-1px);
+}
+
 /* Hero Section */
 .hero {
   background-color: rgba(23, 53, 45, 0.38);
