@@ -196,7 +196,7 @@ The application uses CSS variables defined in the `:root` selector to maintain a
 
 The database schema for SetPoint is shown below, including the main models and their relationships.
 
-![SetPoint ERD](ReadMe-Images/ERD_SetPoint.webp)
+![ERD image](ReadME-Images/ERD.webp)
 
 SetPoint uses a relational database structure centred around bookings:
 
@@ -290,7 +290,7 @@ Screenshots of certain pages and scores (mobile and desktop).
 
 ### Browser Compatibility
 
-![Browser Compatibility](/ReadME-Images/browser_comp.png)
+![Browser Compatibility](ReadME-Images/browser_comp.png)
 
 PowerMapper flagged limited support for the CSS backdrop-filter property in older browsers; however, background-color fallbacks are implemented so the interface remains fully usable without blur effects.
 
