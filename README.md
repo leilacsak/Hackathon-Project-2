@@ -324,7 +324,19 @@ Attach screenshot.
 
 ## Bugs
 
-List bugs and how you fixed them.
+| Bug Description | How Found | Environment | Fix Applied | Status |
+| --- | --- | --- | --- | :---: |
+| Django template syntax error when checking booked slots | Local server refused to run, Django Debug messages | Development | Refactored the data structure in the view to use string keys instead of tuples | Fixed ✓ |
+| Booking links not pre-filling the booking form | Testing user journey on local server | Development | Updated the slot links to pass parameters that matched the form fields | Fixed ✓ |
+| Booked slots showing as available in courts page | User testing on live site | Production | Modified courts view to create booked_slots set and pass to template to visually mark booked time slots | Fixed ✓ |
+| Double-booking allowed on same court/time slot | Manual testing of booking form | Development | Added validation in BookingForm.clean() to check for existing bookings with exclusion for edit mode | Fixed ✓ |
+| Users could cancel other users' bookings via URL manipulation | Security testing | Development | Added ownership check in cancel_booking view; returns HttpResponseForbidden if user doesn't own booking | Fixed ✓ |
+| Maintenance window bookings not blocked | Automated test suite | Development | Added court.is_available_on() validation in form with detailed error messages for maintenance periods | Fixed ✓ |
+| Bookings outside court opening hours allowed | Manual testing with edge cases | Development | Added validation to check booking_time against court opening/closing times with clear error messages | Fixed ✓ |
+| Saved slots creating duplicate entries | User testing | Production | Changed SavedSlot.objects.create() to get_or_create() in save_slot view to prevent duplicates | Fixed ✓ |
+| Missing merge migration file causing deployment errors | Database migration errors during deployment | Production | Restored missing migration 0004_merge_0003_booking_owner_0003_booking_user.py | Fixed ✓ |
+| About page content structure inconsistencies | Content review | Production | Adjusted structure and layout of about page content for better presentation | Fixed ✓ |
+
 
 ## Deployment
 
