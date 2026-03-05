@@ -2,7 +2,7 @@
 
 SetPoint is a full-stack Django web application that allows users to book tennis courts online. The platform includes user authentication, real-time court availability, booking management, and Stripe payment integration.
 
-![SetPoint Logo](core\static\core\images\SetPoint_logo.png)
+![SetPoint Logo](core/static/core/images/SetPoint_logo.png)
 
 ## Repository Links
 
@@ -51,8 +51,8 @@ SetPoint is a full-stack Django web application that allows users to book tennis
 
 ## Overview
 
-SetPoint is a Django-based tennis court booking platform built for a team hackathon.  
- Users can discover available courts, book time slots, pay securely, and manage their bookings from a personal dashboard.
+SetPoint is a Django-based tennis court booking platform built for a team hackathon.
+Users can discover available courts, book time slots, pay securely, and manage their bookings from a personal dashboard.
 
 The app supports the full booking lifecycle:
 
@@ -198,7 +198,7 @@ The application uses CSS variables defined in the `:root` selector to maintain a
 
 The database schema for SetPoint is shown below, including the main models and their relationships.
 
-![ERD image](ReadME-Images/ERD.webp)
+![](assets/20260305_142152_ERD.webp)
 
 SetPoint uses a relational database structure centred around bookings:
 
@@ -360,11 +360,15 @@ The following libraries and packages were used to support development, deploymen
 
 ## Testing
 
-Important part of your README.
-
 ### Google's Lighthouse Performance
 
-Screenshots of certain pages and scores (mobile and desktop).
+### Mobile
+
+![](assets/20260305_135857_googlelight-mobile.png)
+
+### Desktop
+
+![](assets/20260305_135912_googlelight-desktop.png)
 
 ### Browser Compatibility
 
@@ -374,7 +378,7 @@ PowerMapper flagged limited support for the CSS backdrop-filter property in olde
 
 ### Responsiveness
 
-Screenshots of the responsiveness, pick a few devices.
+![](assets/20260305_141654_responsive.png)
 
 ### Code Validation
 
@@ -396,6 +400,36 @@ All pages were validated as a guest and logged-in user using the [W3C HTML Valid
 Screenshot of validation results:
 
 ![HTML validation](testing/html_validation.png)
+
+#### CSS Validation
+
+CSS was validated using the [W3C CSS Validator](https://jigsaw.w3.org/css-validator/).
+
+| File                          | Result    |
+| ----------------------------- | --------- |
+| `core/static/core/styles.css` | No errors |
+
+Screenshot of validation results:
+
+![CSS validation](testing/css_validation.png)
+
+#### PEP8 / Python Linting
+
+Python code style was checked with a linter and the output is shown below:
+
+![PEP8 and pylint results](testing/pylint_results.png)
+
+The report highlights a small number of style warnings (for example line length, spacing, and docstring formatting) rather than functional errors. These are non-blocking issues, and the application still runs and passes the automated test suite.
+
+![](assets/20260305_135254_court.png)
+
+![](assets/20260305_135254_initial.png)
+
+![](assets/20260305_135254_booking_payment.png)
+
+![](assets/20260305_135254_booking_user.png)
+
+![](assets/20260305_135254_booking_owner.png)
 
 ### Feature Manual Testing
 
