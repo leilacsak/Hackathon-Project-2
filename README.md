@@ -159,6 +159,8 @@ Future Features ( planned for future development)
 
 User stories were prioritised using the MoSCoW method (Must Have, Should Have, Could Have) to ensure that essential booking functionality was implemented first while allowing room for additional improvements if time permitted.
 
+![Kanban Project Board](ReadMe-Images/kanban.png)
+
 **Development was structured into the following sprints:**
 
 **Sprint 1** – Foundation
@@ -210,19 +212,95 @@ SetPoint uses a relational database structure centred around bookings:
 
 ## Features:
 
-Explain your features on the website (navigation, pages, links, forms, input fields, CRUD).
+SetPoint provides a complete court-booking user journey, from checking live availability to paying, managing bookings, and contacting support.
 
 ### Navigation
 
+- Responsive Bootstrap navigation with logo and route links.
+
+- Public links: **Home**, **About**, **Courts**, **Login**, and **Sign Up**.
+
+![Public Navbar](ReadMe-Images/navbar-public.png)
+
+- Authenticated user links: **Book a Court**, **My Bookings**, **Contact**, and **Logout**.
+
+![User Navbar](ReadMe-Images/navbar-user.png)
+
+- Admin users also see a direct **Admin** link to the Django admin dashboard.
+
+![Admin Navbar](ReadMe-Images/navbar-admin.png)
+
+- Global Django message alerts are shown below the navbar for feedback (success, warning, and error states).
+
 ### Footer
+
+- Branded footer with copyright.
+- Team GitHub profile links using Font Awesome icons.
+- Club contact details and opening hours.
+- Consistent footer layout across all pages using the shared base template.
+
+![Footer](ReadMe-images/footer.png)
 
 ### Home-page
 
-### Add your pages
+- Hero section with clear call-to-action buttons: **Book Now** and **View Courts**.
+- Summary cards displaying today's date and total upcoming bookings.
+- Visual glass-style UI treatment consistent with the overall design theme.
+
+![Home Page](ReadMe-Images/homepage.png)
+
+### Additional pages
+
+- **About Page (`/about/`)**: company description and quick **Book Now** CTA.
+
+![About Page](ReadMe-Images/aboutpage.png)
+
+- **Courts Page (`/courts/`)**: date + surface filtering, live slot availability, and peak/off-peak pricing display.
+
+![Courts Page](ReadMe-Images/courtspage.png)
+
+- **Login & Sign Up & Log out Pages**: Secure authentication pages powered by django-allauth, allowing users to create an account, log in, log out and access protected booking features such as booking management, payments, and saved slots.
+
+![Login Page](ReadMe-Images/loginpage.png)
+
+![Logout Page](ReadMe-Images/logoutpage.png)
+
+![Sign up Page](ReadMe-Images/registerpage.png)
+
+- **Book Court Page (`/book/`)**: booking form with validation, saved-slot shortcuts, and Stripe checkout handoff.
+
+![Book a court Page](ReadMe-Images/bookacourtpage.png)
+
+- **My Bookings (`/my-bookings/`)**: upcoming/past booking tables with payment status, edit/cancel, save/unsave, and rebook actions.
+
+![My Bookings Page](ReadMe-Images/mybookingspage.png)
+
+- **Contact Support (`/contact/`)**: support/refund request form linked to optional booking context.
+
+![Contact Page](ReadMe-Images/contactpage.png)
+
+- **Payment pages (`/payments/success/`)**: user feedback after Stripe checkout.
+
+![Payment Page](ReadMe-Images/paymentpage.png)
+
+![Successful payment Page](ReadMe-Images/successfulpayment.png)
+
+![Refund Proccess](ReadMe-Images/cancelledbooking.png)
 
 ### CRUD
 
+- **Create**: users create bookings and support requests; users can save favourite slots.
+- **Read**: users view court availability, pricing, saved slots, and booking history.
+- **Update**: users can edit their own upcoming bookings.
+- **Delete/Cancel**: users can cancel eligible bookings and unsave saved slots.
+- Validation prevents double-booking of the same court/date/time slot.
+
 ### Authentication-Authorisation
+
+- Authentication is implemented with **django-allauth** (signup, login, logout).
+- Booking and account actions are protected with `@login_required`.
+- Authorization is ownership-based: users can only edit, pay for, or cancel bookings that belong to their account.
+- Support requests are tied to the authenticated user, and admin-only functions are accessible via Django admin.
 
 ## Technologies Used
 
@@ -376,16 +454,16 @@ The report highlights a small number of style warnings (for example line length,
 
 #### Feature Manual Test Screenshots
 
-| Feature Area                              | Screenshot Evidence                                                                                                                                      |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authentication (signup/login/logout)      | `core\static\core\images\testing-images\feature-sign-in.png`                                                                                             |
-| Court discovery and filtering             | `core\static\core\images\testing-images\feature-court-filtering.png`                                                                                     |
-| Booking creation and edit                 | `core\static\core\images\testing-images\feature-court-booking-form.png`                                                                                  |
-| Stripe payment success/cancel             | `core\static\core\images\testing-images\feature-stripe.png` `core\static\core\images\testing-images\feature-stripe-confirm.png`                          |
-| Booking cancellation and history          | `core\static\core\images\testing-images\feature-past-upcoming-bookings.png`                                                                              |
-| Saved slots and quick rebook              | `core\static\core\images\testing-images\feature-saved-slot.png`                                                                                          |
-| Contact support and About page            | Contact Support:`core\static\core\images\testing-images\feature-contact.png` About page: `core\static\core\images\testing-images\feature-about-page.png` |
-| Admin booking/availability/refund actions | `core\static\core\images\testing-images\admin-test-change-booking.png` `core\static\core\images\testing-images\admin-test-court.png`                     |
+| Feature Area                              | Screenshot Evidence                                                                                                                                       |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authentication (signup/login/logout)      | `core\static\core\images\testing-images\feature-sign-in.png`                                                                                              |
+| Court discovery and filtering             | `core\static\core\images\testing-images\feature-court-filtering.png`                                                                                      |
+| Booking creation and edit                 | `core\static\core\images\testing-images\feature-court-booking-form.png`                                                                                   |
+| Stripe payment success/cancel             | `core\static\core\images\testing-images\feature-stripe.png` `core\static\core\images\testing-images\feature-stripe-confirm.png`                           |
+| Booking cancellation and history          | `core\static\core\images\testing-images\feature-past-upcoming-bookings.png`                                                                               |
+| Saved slots and quick rebook              | `core\static\core\images\testing-images\feature-saved-slot.png`                                                                                           |
+| Contact support and About page            | Contact Support: `core\static\core\images\testing-images\feature-contact.png` About page: `core\static\core\images\testing-images\feature-about-page.png` |
+| Admin booking/availability/refund actions | `core\static\core\images\testing-images\admin-test-change-booking.png` `core\static\core\images\testing-images\admin-test-court.png`                      |
 
 ### Automated Testing Against User Stories
 
