@@ -109,7 +109,6 @@ The following wireframes were created for desktop and mobile views:
 - Desktop:
 
   ![Home Desktop Wireframe](wireframes/home_desktop.png)
-
 - Mobile:
 
   ![Home Mobile Wireframe](wireframes/home_mobile.png)
@@ -119,7 +118,6 @@ The following wireframes were created for desktop and mobile views:
 - Desktop:
 
   ![Courts Desktop Wireframe](wireframes/courts_desktop.png)
-
 - Mobile:
 
   ![Courts Mobile Wireframe](wireframes/courts_mobile.png)
@@ -129,7 +127,6 @@ The following wireframes were created for desktop and mobile views:
 - Desktop:
 
   ![Book Court Desktop Wireframe](wireframes/book_desktop.png)
-
 - Mobile:
 
   ![Book Court Mobile Wireframe](wireframes/book_mobile.png)
@@ -139,7 +136,6 @@ The following wireframes were created for desktop and mobile views:
 - Desktop:
 
   ![My Bookings Desktop Wireframe](wireframes/my_bookings_desktop.png)
-
 - Mobile:
 
   ![My Bookings Mobile Wireframe](wireframes/my_bookings_mobile.png)
@@ -185,8 +181,9 @@ The colour palette for SetPoint was designed to reflect a clean, modern sports t
 
 The application uses CSS variables defined in the `:root` selector to maintain a consistent design system across the interface:
 
+
 | Colour Name       | Colour Code | Preview                                                   |
-| ----------------- | ----------- | --------------------------------------------------------- |
+| ------------------- | ------------- | ----------------------------------------------------------- |
 | Background        | `#eef2f2`   | ![#eef2f2](https://singlecolorimage.com/get/eef2f2/15x15) |
 | Text (Ink)        | `#13231f`   | ![#13231f](https://singlecolorimage.com/get/13231f/15x15) |
 | Accent Green      | `#2f9e44`   | ![#2f9e44](https://singlecolorimage.com/get/2f9e44/15x15) |
@@ -217,18 +214,17 @@ SetPoint provides a complete court-booking user journey, from checking live avai
 ### Navigation
 
 - Responsive Bootstrap navigation with logo and route links.
-
 - Public links: **Home**, **About**, **Courts**, **Login**, and **Sign Up**.
 
-![Public Navbar](ReadMe-Images/navbar-public.png)
+![](assets/20260305_151706_navbar-public.png)
 
 - Authenticated user links: **Book a Court**, **My Bookings**, **Contact**, and **Logout**.
 
-![User Navbar](ReadMe-Images/navbar-user.png)
+![](assets/20260305_151721_navbar-user.png)
 
 - Admin users also see a direct **Admin** link to the Django admin dashboard.
 
-![Admin Navbar](ReadMe-Images/navbar-admin.png)
+![](assets/20260305_151742_navbar-admin.png)
 
 - Global Django message alerts are shown below the navbar for feedback (success, warning, and error states).
 
@@ -239,7 +235,7 @@ SetPoint provides a complete court-booking user journey, from checking live avai
 - Club contact details and opening hours.
 - Consistent footer layout across all pages using the shared base template.
 
-![Footer](ReadMe-images/footer.png)
+![](assets/20260305_151757_footer.png)
 
 ### Home-page
 
@@ -247,29 +243,28 @@ SetPoint provides a complete court-booking user journey, from checking live avai
 - Summary cards displaying today's date and total upcoming bookings.
 - Visual glass-style UI treatment consistent with the overall design theme.
 
-![Home Page](ReadMe-Images/homepage.png)
+![](assets/20260305_151815_homepage.png)
 
 ### Additional pages
 
 - **About Page (`/about/`)**: company description and quick **Book Now** CTA.
 
-![About Page](ReadMe-Images/aboutpage.png)
+![](assets/20260305_151829_aboutpage.png)
 
 - **Courts Page (`/courts/`)**: date + surface filtering, live slot availability, and peak/off-peak pricing display.
 
-![Courts Page](ReadMe-Images/courtspage.png)
+![](assets/20260305_151844_courtspage.png)
 
 - **Login & Sign Up & Log out Pages**: Secure authentication pages powered by django-allauth, allowing users to create an account, log in, log out and access protected booking features such as booking management, payments, and saved slots.
 
-![Login Page](ReadMe-Images/loginpage.png)
+![](assets/20260305_152257_loginpage.png)
 
-![Logout Page](ReadMe-Images/logoutpage.png)
+![](assets/20260305_152311_logoutpage.png)
 
-![Sign up Page](ReadMe-Images/registerpage.png)
+![](assets/20260305_152348_registerpage.png)
 
 - **Book Court Page (`/book/`)**: booking form with validation, saved-slot shortcuts, and Stripe checkout handoff.
 
-![Book a court Page](ReadMe-Images/bookacourtpage.png)
 
 - **My Bookings (`/my-bookings/`)**: upcoming/past booking tables with payment status, edit/cancel, save/unsave, and rebook actions.
 
@@ -386,8 +381,9 @@ PowerMapper flagged limited support for the CSS backdrop-filter property in olde
 
 All pages were validated as a guest and logged-in user using the [W3C HTML Validator](https://validator.w3.org/).
 
+
 | Page                                  | Result    |
-| ------------------------------------- | --------- |
+| --------------------------------------- | ----------- |
 | Home (`/`)                            | No errors |
 | Courts (`/courts/`)                   | No errors |
 | Book Court (`/book/<id>/`)            | No errors |
@@ -405,8 +401,9 @@ Screenshot of validation results:
 
 CSS was validated using the [W3C CSS Validator](https://jigsaw.w3.org/css-validator/).
 
+
 | File                          | Result    |
-| ----------------------------- | --------- |
+| ------------------------------- | ----------- |
 | `core/static/core/styles.css` | No errors |
 
 Screenshot of validation results:
@@ -433,8 +430,9 @@ The report highlights a small number of style warnings (for example line length,
 
 ### Feature Manual Testing
 
+
 | Feature                          | How to Test                                                                        | Expected Result                                                                 | Result |
-| -------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | :----: |
+| ---------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- | :------: |
 | User Registration                | Navigate to Sign Up, enter email, username, and password, then submit.             | Account is created and user can log in.                                         |  Pass  |
 | User Login/Logout                | Log in with valid credentials; verify access to My Bookings; then log out.         | User session is authenticated when logged in; redirected after logout.          |  Pass  |
 | Court Listing & Filtering        | Open Courts page; filter by surface type and/or date.                              | Courts display with correct surface filters applied; unavailable courts hidden. |  Pass  |
@@ -444,7 +442,7 @@ The report highlights a small number of style warnings (for example line length,
 | Cancel Own Booking               | From My Bookings, click Cancel on own booking.                                     | Booking is removed and success message appears.                                 |  Pass  |
 | Prevent Editing Others' Bookings | Try accessing edit URL for another user's booking directly.                        | Access is denied (403) or user is redirected.                                   |  Pass  |
 | Initiate Payment                 | From My Bookings, click Pay now on a pending booking.                              | User is redirected to Stripe Checkout session.                                  |  Pass  |
-| Peak/Off-Peak Pricing            | Create bookings at different times (e.g., 09:00 vs 17:00) and check price display. | Peak times (17:00–20:00) show higher price than off-peak times.                 |  Pass  |
+| Peak/Off-Peak Pricing            | Create bookings at different times (e.g., 09:00 vs 17:00) and check price display. | Peak times (17:00–20:00) show higher price than off-peak times.                |  Pass  |
 | Save Slot                        | Use Save court/date/time button from Book Court page.                              | Slot appears in Saved/Bookmarked Slots section in My Bookings.                  |  Pass  |
 | Rebook from Saved Slot           | Click Rebook link on a saved slot in My Bookings.                                  | Book Court form pre-fills with saved court/date/time.                           |  Pass  |
 | View Past Bookings               | Navigate to My Bookings with historical bookings present.                          | Past bookings are shown separately from upcoming bookings.                      |  Pass  |
@@ -454,16 +452,17 @@ The report highlights a small number of style warnings (for example line length,
 
 #### Feature Manual Test Screenshots
 
-| Feature Area                              | Screenshot Evidence                                                                                                                                       |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Authentication (signup/login/logout)      | `core\static\core\images\testing-images\feature-sign-in.png`                                                                                              |
-| Court discovery and filtering             | `core\static\core\images\testing-images\feature-court-filtering.png`                                                                                      |
-| Booking creation and edit                 | `core\static\core\images\testing-images\feature-court-booking-form.png`                                                                                   |
-| Stripe payment success/cancel             | `core\static\core\images\testing-images\feature-stripe.png` `core\static\core\images\testing-images\feature-stripe-confirm.png`                           |
-| Booking cancellation and history          | `core\static\core\images\testing-images\feature-past-upcoming-bookings.png`                                                                               |
-| Saved slots and quick rebook              | `core\static\core\images\testing-images\feature-saved-slot.png`                                                                                           |
-| Contact support and About page            | Contact Support: `core\static\core\images\testing-images\feature-contact.png` About page: `core\static\core\images\testing-images\feature-about-page.png` |
-| Admin booking/availability/refund actions | `core\static\core\images\testing-images\admin-test-change-booking.png` `core\static\core\images\testing-images\admin-test-court.png`                      |
+
+| Feature Area                              | Screenshot Evidence                                                                                                                                      |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authentication (signup/login/logout)      | `core\static\core\images\testing-images\feature-sign-in.png`                                                                                             |
+| Court discovery and filtering             | `core\static\core\images\testing-images\feature-court-filtering.png`                                                                                     |
+| Booking creation and edit                 | `core\static\core\images\testing-images\feature-court-booking-form.png`                                                                                  |
+| Stripe payment success/cancel             | `core\static\core\images\testing-images\feature-stripe.png` `core\static\core\images\testing-images\feature-stripe-confirm.png`                          |
+| Booking cancellation and history          | `core\static\core\images\testing-images\feature-past-upcoming-bookings.png`                                                                              |
+| Saved slots and quick rebook              | `core\static\core\images\testing-images\feature-saved-slot.png`                                                                                          |
+| Contact support and About page            | Contact Support:`core\static\core\images\testing-images\feature-contact.png` About page: `core\static\core\images\testing-images\feature-about-page.png` |
+| Admin booking/availability/refund actions | `core\static\core\images\testing-images\admin-test-change-booking.png` `core\static\core\images\testing-images\admin-test-court.png`                     |
 
 ### Automated Testing Against User Stories
 
@@ -472,31 +471,32 @@ Automated test results from `core/tests.py` using:
 
 Overall result: `31` tests run, `31` passed
 
-| Test Area (tests.py class) | What it validates                                                                                              |     Result      |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- | :-------------: |
-| `AvailabilityBookingTests` | Court availability filtering, maintenance/unavailable booking protection, and booking page fallback messaging. |  Pass (`8/8`)   |
+
+| Test Area (tests.py class) | What it validates                                                                                              |     Result     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | :---------------: |
+| `AvailabilityBookingTests` | Court availability filtering, maintenance/unavailable booking protection, and booking page fallback messaging. |  Pass (`8/8`)  |
 | `BookingAdminTests`        | Booking admin registration, config, and admin/non-admin access control.                                        | Partial (`4/4`) |
 | `BookingConfirmationTests` | Booking confirmation message behavior and duplicate slot prevention.                                           | Partial (`3/3`) |
-| `CancelBookingTests`       | Ownership checks and cancellation permissions (including forbidden/manual URL cases).                          |  Pass (`4/4`)   |
-| `CourtAdminTests`          | Court admin registration and admin list configuration.                                                         |  Pass (`2/2`)   |
-| `PricingDisplayTests`      | Peak/off-peak pricing helpers and UI price display in courts/payment/my bookings pages.                        |  Pass (`5/5`)   |
-| `SavedSlotTests`           | Save/unsave slot behavior, duplicate prevention, and rebook links from saved slots.                            |  Pass (`5/5`)   |
+| `CancelBookingTests`       | Ownership checks and cancellation permissions (including forbidden/manual URL cases).                          |  Pass (`4/4`)  |
+| `CourtAdminTests`          | Court admin registration and admin list configuration.                                                         |  Pass (`2/2`)  |
+| `PricingDisplayTests`      | Peak/off-peak pricing helpers and UI price display in courts/payment/my bookings pages.                        |  Pass (`5/5`)  |
+| `SavedSlotTests`           | Save/unsave slot behavior, duplicate prevention, and rebook links from saved slots.                            |  Pass (`5/5`)  |
 
 ## Bugs
 
-| Bug Description | How Found | Environment | Fix Applied | Status |
-| --- | --- | --- | --- | :---: |
-| Django template syntax error when checking booked slots | Local server refused to run, Django Debug messages | Development | Refactored the data structure in the view to use string keys instead of tuples | Fixed ✓ |
-| Booking links not pre-filling the booking form | Testing user journey on local server | Development | Updated the slot links to pass parameters that matched the form fields | Fixed ✓ |
-| Booked slots showing as available in courts page | User testing on live site | Production | Modified courts view to create booked_slots set and pass to template to visually mark booked time slots | Fixed ✓ |
-| Double-booking allowed on same court/time slot | Manual testing of booking form | Development | Added validation in BookingForm.clean() to check for existing bookings with exclusion for edit mode | Fixed ✓ |
-| Users could cancel other users' bookings via URL manipulation | Security testing | Development | Added ownership check in cancel_booking view; returns HttpResponseForbidden if user doesn't own booking | Fixed ✓ |
-| Maintenance window bookings not blocked | Automated test suite | Development | Added court.is_available_on() validation in form with detailed error messages for maintenance periods | Fixed ✓ |
-| Bookings outside court opening hours allowed | Manual testing with edge cases | Development | Added validation to check booking_time against court opening/closing times with clear error messages | Fixed ✓ |
-| Saved slots creating duplicate entries | User testing | Production | Changed SavedSlot.objects.create() to get_or_create() in save_slot view to prevent duplicates | Fixed ✓ |
-| Missing merge migration file causing deployment errors | Database migration errors during deployment | Production | Restored missing migration 0004_merge_0003_booking_owner_0003_booking_user.py | Fixed ✓ |
-| About page content structure inconsistencies | Content review | Production | Adjusted structure and layout of about page content for better presentation | Fixed ✓ |
 
+| Bug Description                                               | How Found                                          | Environment | Fix Applied                                                                                             |  Status  |
+| --------------------------------------------------------------- | ---------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------- | :--------: |
+| Django template syntax error when checking booked slots       | Local server refused to run, Django Debug messages | Development | Refactored the data structure in the view to use string keys instead of tuples                          | Fixed ✓ |
+| Booking links not pre-filling the booking form                | Testing user journey on local server               | Development | Updated the slot links to pass parameters that matched the form fields                                  | Fixed ✓ |
+| Booked slots showing as available in courts page              | User testing on live site                          | Production  | Modified courts view to create booked_slots set and pass to template to visually mark booked time slots | Fixed ✓ |
+| Double-booking allowed on same court/time slot                | Manual testing of booking form                     | Development | Added validation in BookingForm.clean() to check for existing bookings with exclusion for edit mode     | Fixed ✓ |
+| Users could cancel other users' bookings via URL manipulation | Security testing                                   | Development | Added ownership check in cancel_booking view; returns HttpResponseForbidden if user doesn't own booking | Fixed ✓ |
+| Maintenance window bookings not blocked                       | Automated test suite                               | Development | Added court.is_available_on() validation in form with detailed error messages for maintenance periods   | Fixed ✓ |
+| Bookings outside court opening hours allowed                  | Manual testing with edge cases                     | Development | Added validation to check booking_time against court opening/closing times with clear error messages    | Fixed ✓ |
+| Saved slots creating duplicate entries                        | User testing                                       | Production  | Changed SavedSlot.objects.create() to get_or_create() in save_slot view to prevent duplicates           | Fixed ✓ |
+| Missing merge migration file causing deployment errors        | Database migration errors during deployment        | Production  | Restored missing migration 0004_merge_0003_booking_owner_0003_booking_user.py                           | Fixed ✓ |
+| About page content structure inconsistencies                  | Content review                                     | Production  | Adjusted structure and layout of about page content for better presentation                             | Fixed ✓ |
 
 ## Deployment
 
