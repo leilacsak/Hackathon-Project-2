@@ -278,7 +278,9 @@ Screenshots of certain pages and scores (mobile and desktop).
 
 ### Browser Compatibility
 
-Check compatibility with different browsers.
+![Browser Compatibility](/ReadME-Images/browser_comp.png)
+
+PowerMapper flagged limited support for the CSS backdrop-filter property in older browsers; however, background-color fallbacks are implemented so the interface remains fully usable without blur effects.
 
 ### Responsiveness
 
@@ -445,5 +447,6 @@ All AI-generated suggestions were reviewed, edited, and validated by the develop
 - GitHub Copilot (development assistance)
 - ChatGPT (ideation, debugging support, and documentation wording)
 - Tinyfy (image optimisation/compression)
+- PowerMapper (check browser compatibility)
 - Discord (communication between team members)
 - Team contributors and reviewers
